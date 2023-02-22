@@ -1,0 +1,376 @@
+{
+  "swagger": "2.0.0",
+  "info": {
+    "title": "LRS Engine API",
+    "description": "RESTful API untuk semua web yang menggunakan LRS Engine.",
+    "contact": {
+      "name": "LRsoft Corp",
+      "url": "https://lrsoft.co.id",
+      "email": "info@lrsoft.org"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "host": "lrsoft.co.id",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "auth": {
+      "type": "apiKey",
+      "in": "query",
+      "name": "api_key"
+    }
+  },
+  "security": [
+    {
+      "auth": []
+    }
+  ],
+  "paths": {
+    "/posts": {
+      "get": {
+        "summary": "Daftar semua pos.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "query",
+            "description": "cari berdasarkan ID kategori (optional)",
+            "type": "string"
+          },
+          {
+            "name": "post_title",
+            "in": "query",
+            "description": "cari berdasarkan judul (optional)",
+            "type": "string"
+          },
+          {
+            "name": "image_size",
+            "in": "query",
+            "description": "set ukuran `post_thumbnail` dan `post_featured`, format `[width]x[height]`, contoh `200x150` (optional)",
+            "type": "string"
+          },
+          {
+            "name": "post_content",
+            "in": "query",
+            "description": "cari berdasarkan isi konten (optional)",
+            "type": "string"
+          },
+          {
+            "name": "post_status",
+            "in": "query",
+            "description": "cari berdasarkan isi konten (optional)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "-1",
+                "0",
+                "1"
+              ],
+              "default": "-1"
+            }
+          },
+          {
+            "name": "post_type",
+            "in": "query",
+            "description": "jenis pos (optional)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "-1",
+                "Post",
+                "Page"
+              ],
+              "default": "-1"
+            }
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "post_id",
+                "post_title",
+                "psot_status",
+                "post_date",
+                "post_last_modified_date",
+                "post_type",
+                "category_id"
+              ],
+              "default": "post_id"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Daftar semua kategori.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "category_title",
+            "in": "query",
+            "description": "cari berdasarkan judul (optional)",
+            "type": "string"
+          },
+          {
+            "name": "image_size",
+            "in": "query",
+            "description": "set ukuran category cover, format `[width]x[height]`, contoh `200x150` (optional)",
+            "type": "string"
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "category_id",
+                "category_title"
+              ],
+              "default": "category_id"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Daftar semua users.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_status",
+            "in": "query",
+            "description": "status user (optional)",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                -1,
+                0,
+                1
+              ],
+              "default": -1
+            }
+          },
+          {
+            "name": "user_name",
+            "in": "query",
+            "description": "cari berdasarkan username (optional)",
+            "type": "string"
+          },
+          {
+            "name": "user_real_name",
+            "in": "query",
+            "description": "cari berdasarkan user real name (optional)",
+            "type": "string"
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "user_id",
+                "user_name",
+                "user_real_name"
+              ],
+              "default": "user_id"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/medias": {
+      "get": {
+        "summary": "Daftar semua pengguna.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "cari berdasarkan judul (optional)",
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/options": {
+      "get": {
+        "summary": "Fetch data options.",
+        "description": "Daftar semua variabel option, params menggunakan concat `key` option yang ingin diambil.\nSemua key langsung di-passing sebagai parameter.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    }
+  }
+}

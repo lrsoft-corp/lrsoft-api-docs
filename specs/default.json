@@ -1,0 +1,7 @@
+{
+  "swagger": "2.0.0",
+  "info": {
+    "title": "LRsoft API",
+    "description": "Berikut adalah beberapa sistem yang telah memiliki API :\n<ul><li><a href='?url=specs/lrs_engine.json'>LRS Engine</a></li><li><a href='?url=specs/lrsoft_api.json'>LRsoft API</a></li><li><a href='?url=specs/pesansayur.json'>PesanSayur API</a></li></ul>"
+  }
+}

@@ -1,0 +1,1145 @@
+{
+  "swagger": "2.0.0",
+  "info": {
+    "title": "LRsoft API",
+    "description": "Tim research and development LRsoft telah mengembangkan beberapa API untuk keperluan project. Beberapa API sengaja dibuka ke publik sebagai bahan inspirasi, meskipun beberapa lagi diantaranya tidak benar-benar terbuka (licensed).",
+    "contact": {
+      "name": "LRsoft",
+      "url": "https://lrsoft.co.id",
+      "email": "info@lrsoft.org"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "host": "api.lrsoft.id",
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "Boat Price",
+      "description": "API yang dapat menampilkan history harga kapal cepat (fast boat) yang melalui Bali, Lombok, dan pulau-pulau Gili."
+    },
+    {
+      "name": "Currency Rate",
+      "description": "API yang dapat menampilkan nilai konversi dari beberapa mata uang yang umum digunakan di banyak negara."
+    },
+    {
+      "name": "IBM Watson",
+      "description": "Beberapa API kognitif dari service IBM Watson."
+    },
+    {
+      "name": "Instagram",
+      "description": "Fetching photo dari Instagram."
+    },
+    {
+      "name": "Mail",
+      "description": "Kirim email menggunakan relay-smtp."
+    },
+    {
+      "name": "Shipping",
+      "description": "Biaya pengiriman paket dari ekspedisi JNE, TIKI, dan POS Indonesia."
+    },
+    {
+      "name": "SMS",
+      "description": "Mengirim SMS."
+    }
+  ],
+  "paths": {
+    "/boat-price/v1/gets": {
+      "get": {
+        "tags": [
+          "Boat Price"
+        ],
+        "summary": "Menampilkan daftar boat yang sudah dikumpulkan oleh Bot.",
+        "parameters": [
+          {
+            "name": "fetch_date",
+            "in": "query",
+            "description": "tanggal fetch, default tanggal saat ini",
+            "type": "string"
+          },
+          {
+            "name": "depart",
+            "in": "query",
+            "description": "keberangkatan, default empty",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Lombok",
+                "Nusa Lembongan",
+                "Gili Air",
+                "Gili Meno",
+                "Gili Gede",
+                "Gili Trawangan",
+                "Bali",
+                "Nusa Ceningan",
+                "Bangsal",
+                "Senggigi",
+                "Teluk Kode",
+                "Nusa Penida",
+                "Benoa",
+                "Padangbai",
+                "Serangan",
+                "Sanur",
+                "Teluk Nara"
+              ]
+            }
+          },
+          {
+            "name": "arrive",
+            "in": "query",
+            "description": "tujuan, default empty",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Lombok",
+                "Nusa Lembongan",
+                "Gili Air",
+                "Gili Meno",
+                "Gili Gede",
+                "Gili Trawangan",
+                "Bali",
+                "Nusa Ceningan",
+                "Bangsal",
+                "Senggigi",
+                "Teluk Kode",
+                "Nusa Penida",
+                "Benoa",
+                "Padangbai",
+                "Serangan",
+                "Sanur",
+                "Teluk Nara"
+              ]
+            }
+          },
+          {
+            "name": "agent",
+            "in": "query",
+            "description": "nama agent, default empty",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Lombok Fast Boats",
+                "Bali Fast Boats",
+                "Gili Bookings",
+                "Gili Tickets",
+                "Gili Transfers",
+                "Gili Best Deal",
+                "Ticket Fast Boat",
+                "Padangbai Booking"
+              ]
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "mengurutkan daftar, default fetch_date",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fetch_date",
+                "depart",
+                "arrive"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan, default DESC",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data, default 10",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset nilai dalam query, default 0",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/currency-rate/v1/gets": {
+      "get": {
+        "tags": [
+          "Currency Rate"
+        ],
+        "summary": "Menampilkan daftar nilai konversi mata uang.",
+        "parameters": [
+          {
+            "name": "sync_date",
+            "in": "query",
+            "description": "tanggal rate, default tanggal saat ini",
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "base",
+            "in": "query",
+            "description": "dasar nilai konversi, default empty",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "AUD",
+                "CAD",
+                "CHF",
+                "EUR",
+                "GBP",
+                "IDR",
+                "JPY",
+                "SGD",
+                "USD"
+              ]
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "description": "tujuan nilai konversi, default empty",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "AUD",
+                "CAD",
+                "CHF",
+                "EUR",
+                "GBP",
+                "IDR",
+                "JPY",
+                "SGD",
+                "USD"
+              ]
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "mencari nama mata uang negara, default empty",
+            "type": "string"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "mengurutkan daftar nilai konversi, default sync_date",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "sync_date",
+                "base",
+                "name",
+                "code",
+                "value"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan, default DESC",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data, default 10",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset nilai dalam query, default 0",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/currency-rate/v1/exchange": {
+      "get": {
+        "tags": [
+          "Currency Rate"
+        ],
+        "summary": "Melakukan konversi mata uang.",
+        "parameters": [
+          {
+            "name": "base",
+            "in": "query",
+            "description": "dasar nilai konversi, default IDR",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "AUD",
+                "CAD",
+                "CHF",
+                "EUR",
+                "GBP",
+                "IDR",
+                "JPY",
+                "SGD",
+                "USD"
+              ]
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "description": "tujuan nilai konversi, default USD",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "AUD",
+                "CAD",
+                "CHF",
+                "EUR",
+                "GBP",
+                "IDR",
+                "JPY",
+                "SGD",
+                "USD"
+              ]
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "nominal yang akan dikonversi, default 0",
+            "type": "integer"
+          },
+          {
+            "name": "round",
+            "in": "query",
+            "description": "pembulatan, default 0",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "formatted",
+            "in": "query",
+            "description": "human readable, default 0",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/ibm-watson/v1/tone-analyzer": {
+      "get": {
+        "tags": [
+          "IBM Watson"
+        ],
+        "description": "Menampilkan analisa tone dari konten yang terdapat dalam sebuah website. Saat ini baru mendukung site dengan engine WordPress dan Blogger.",
+        "parameters": [
+          {
+            "name": "site",
+            "in": "query",
+            "description": "alamat website yang akan dianalisa (fully qualified URL, contoh: http://nypost.com)",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "jumlah post yang akan dianalisa, default 5",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/instagram/v1/tag": {
+      "get": {
+        "tags": [
+          "Instagram"
+        ],
+        "summary": "Fetch daftar photo berdasarkan tag.",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "kata kunci tag",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/instagram/v1/user": {
+      "get": {
+        "tags": [
+          "Instagram"
+        ],
+        "summary": "Fetch profil user beserta foto terkini yang dipost.",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "username dari akun",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/mail/v1/send": {
+      "get": {
+        "tags": [
+          "Mail"
+        ],
+        "summary": "Kirim email.",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "key autentikasi",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "name": "to_email",
+            "in": "query",
+            "description": "alamat email tujuan",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "to_name",
+            "in": "query",
+            "description": "nama email tujuan",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "from_email",
+            "in": "query",
+            "description": "alamat email pengirim",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "from_name",
+            "in": "query",
+            "description": "nama email pengirim",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "description": "body email (HTML versi encoded)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "description": "subjek email",
+            "type": "string"
+          },
+          {
+            "name": "cc_email",
+            "in": "query",
+            "description": "alamat email CC",
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "cc_name",
+            "in": "query",
+            "description": "nama email CC",
+            "type": "string"
+          },
+          {
+            "name": "bcc_email",
+            "in": "query",
+            "description": "alamat email BCC",
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "bcc_name",
+            "in": "query",
+            "description": "nama email BCC",
+            "type": "string"
+          },
+          {
+            "name": "reply_to_email",
+            "in": "query",
+            "description": "alamat email untuk tujuan reply",
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "reply_to_name",
+            "in": "query",
+            "description": "nama email untuk tujuan reply",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/shipping/v1/cities": {
+      "get": {
+        "tags": [
+          "Shipping"
+        ],
+        "summary": "Tampilkan daftar kota-kota di Indonesia.",
+        "parameters": [
+          {
+            "name": "city_name",
+            "in": "query",
+            "description": "cari kota berdasarkan nama kota (optional)",
+            "type": "string"
+          },
+          {
+            "name": "province",
+            "in": "query",
+            "description": "cari kota berdasarkan nama provinsi (optional)",
+            "type": "string"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "city_id",
+                "city_name",
+                "province"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan, default DESC",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data, -1 untuk semua data, default 10",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset nilai dalam query, default 0",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/shipping/v1/cost": {
+      "get": {
+        "tags": [
+          "Shipping"
+        ],
+        "summary": "Cek biaya kirim.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "description": "ID kota asal dari cities",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "description": "ID kota tujuan dari cities",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "courier_code",
+            "in": "query",
+            "description": "kode kurir",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "jne",
+                "tiki",
+                "pos"
+              ]
+            }
+          },
+          {
+            "name": "weight",
+            "in": "query",
+            "description": "simulasi berat dari paket (kg)",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/shipping/v1/costs": {
+      "get": {
+        "tags": [
+          "Shipping"
+        ],
+        "summary": "Cek daftar biaya kirim.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "description": "ID kota asal dari cities",
+            "type": "integer"
+          },
+          {
+            "name": "origin_name",
+            "in": "query",
+            "description": "nama kota asal dari cities",
+            "type": "string"
+          },
+          {
+            "name": "origin_potal",
+            "in": "query",
+            "description": "kode postal kota asal dari cities",
+            "type": "integer"
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "description": "ID kota tujuan dari cities",
+            "type": "integer"
+          },
+          {
+            "name": "destination_name",
+            "in": "query",
+            "description": "nama kota tujuan dari cities",
+            "type": "string"
+          },
+          {
+            "name": "destination_potal",
+            "in": "query",
+            "description": "kode postal kota tujuan dari cities",
+            "type": "integer"
+          },
+          {
+            "name": "courier_code",
+            "in": "query",
+            "description": "kode kurir",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "jne",
+                "tiki",
+                "pos"
+              ]
+            }
+          },
+          {
+            "name": "weight",
+            "in": "query",
+            "description": "simulasi berat dari paket (kg)",
+            "type": "integer"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "origin",
+                "destination",
+                "courier_code",
+                "courier_service"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan, default DESC",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data, -1 untuk semua data, default 10",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset nilai dalam query, default 0",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/shipping/v1/locations": {
+      "get": {
+        "tags": [
+          "Shipping"
+        ],
+        "summary": "Tampilkan daftar lokasi di Indonesia.",
+        "parameters": [
+          {
+            "name": "kelurahan",
+            "in": "query",
+            "description": "cari kota berdasarkan nama kelurahan (optional)",
+            "type": "string"
+          },
+          {
+            "name": "kecamatan",
+            "in": "query",
+            "description": "cari kota berdasarkan nama kecamatan (optional)",
+            "type": "string"
+          },
+          {
+            "name": "kabupaten",
+            "in": "query",
+            "description": "cari kota berdasarkan nama kabupaten (optional)",
+            "type": "string"
+          },
+          {
+            "name": "provinsi",
+            "in": "query",
+            "description": "cari kota berdasarkan nama provinsi (optional)",
+            "type": "string"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "kelurahan",
+                "kecamatan",
+                "kabupaten",
+                "provinsi"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan, default DESC",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data, -1 untuk semua data, default 10",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset nilai dalam query, default 0",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/sms/v1/outbox": {
+      "get": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "Daftar SMS yang akan/telah dikirim.",
+        "parameters": [
+          {
+            "name": "phoneid",
+            "in": "query",
+            "description": "nama modem",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "status pengiriman",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                "-1",
+                "0",
+                "1"
+              ],
+              "default": "-1"
+            }
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "id",
+                "date",
+                "phoneid"
+              ],
+              "default": "id"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/sms/v1/outbox/insert": {
+      "get": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "Kirim SMS.",
+        "parameters": [
+          {
+            "name": "number",
+            "in": "query",
+            "description": "nomor tujuan, format 08xxxxx",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "messages",
+            "in": "query",
+            "description": "isi pesan",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "phoneid",
+            "in": "query",
+            "description": "Nama modem (default lrsoft)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "description": "penanda di akhir pesan, default (LRS)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/sms/v1/inbox": {
+      "get": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "Daftar SMS yang masuk.",
+        "parameters": [
+          {
+            "name": "phoneid",
+            "in": "query",
+            "description": "nama modem",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "status proses",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                "-1",
+                "0",
+                "1"
+              ],
+              "default": "-1"
+            }
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "id",
+                "date",
+                "phoneid"
+              ],
+              "default": "id"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ],
+              "default": "DESC"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/sms/v2/outbox": {
+      "get": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "Daftar SMS.",
+        "parameters": [
+          {
+            "name": "phoneid",
+            "in": "query",
+            "description": "nama modem",
+            "default": "lrsoft",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "status pengiriman",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                "0",
+                "1"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query.",
+            "type": "integer",
+            "default": "50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/sms/v2/outbox/insert": {
+      "get": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "Kirim SMS.",
+        "parameters": [
+          {
+            "name": "number",
+            "in": "query",
+            "description": "nomor tujuan, format 08xxxxx",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "messages",
+            "in": "query",
+            "description": "isi pesan",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "phoneid",
+            "in": "query",
+            "description": "Nama modem",
+            "default": "lrsoft",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "description": "penanda di akhir pesan, default (LRS)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    }
+  }
+}

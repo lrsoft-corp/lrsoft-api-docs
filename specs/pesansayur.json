@@ -1,0 +1,954 @@
+{
+  "swagger": "2.0.0",
+  "info": {
+    "title": "PesanSayur.id API",
+    "description": "RESTful API untuk module Shop LRS Engine.",
+    "contact": {
+      "name": "PesanSayur.id",
+      "url": "https://web.pesansayur.id",
+      "email": "info@pesansayur.id"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "host": "web.pesansayur.id",
+  "basePath": "/shop/api",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "auth": {
+      "type": "apiKey",
+      "in": "query",
+      "name": "api_key"
+    }
+  },
+  "security": [
+    {
+      "auth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Public",
+      "description": "Dapat diakses oleh umum, tidak perlu sesi (logged in)."
+    },
+    {
+      "name": "Private",
+      "description": "Hanya dapat diakses oleh customer yang sudah login."
+    }
+  ],
+  "paths": {
+    "/item": {
+      "get": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Daftar semua item.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "query",
+            "description": "cari berdasarkan ID kategori (optional)",
+            "type": "string"
+          },
+          {
+            "name": "item_title",
+            "in": "query",
+            "description": "cari berdasarkan judul (optional)",
+            "type": "string"
+          },
+          {
+            "name": "image_size",
+            "in": "query",
+            "description": "set ukuran item images, format `[width]x[height]`, contoh `200x150` (optional)",
+            "type": "string"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "item_id",
+                "item_title"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/category": {
+      "get": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Daftar semua kategori.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "category_title",
+            "in": "query",
+            "description": "cari berdasarkan judul (optional)",
+            "type": "string"
+          },
+          {
+            "name": "image_size",
+            "in": "query",
+            "description": "set ukuran category image, format `[width]x[height]`, contoh `200x150` (optional)",
+            "type": "string"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "category_id",
+                "category_title"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/login": {
+      "post": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Login.",
+        "description": "Login akan memberikan `session_key` sebagai return, dapat di-passing untuk melakukan validasi aksi.",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "formData",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "password",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sukses",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": "true"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil login."
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "ps_user_session_key": {
+                      "type": "string",
+                      "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    },
+                    "ps_user_session_expired": {
+                      "type": "string",
+                      "example": "1000-01-01 00:00:00"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/logout": {
+      "get": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Logout.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/register": {
+      "post": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Registrasi.",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_real_name",
+            "in": "formData",
+            "description": "Nama lengkap",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_email",
+            "in": "formData",
+            "description": "Alamat email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_password",
+            "in": "formData",
+            "description": "Password",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          },
+          {
+            "name": "user_password_confirm",
+            "in": "formData",
+            "description": "Konfirmasi password",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          },
+          {
+            "name": "customer_phone",
+            "in": "formData",
+            "description": "Nomor HP customer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "customer_birthday",
+            "in": "formData",
+            "description": "Tanggal lahir customer (format: yyyy-mm-dd)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "customer_gender",
+            "in": "formData",
+            "description": "Jenis kelamin customer",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Male",
+                "Female"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/register/activation": {
+      "get": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Konfirmasi akun.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "activation_code",
+            "in": "query",
+            "description": "Kode aktivasi yang didapatkan saat registrasi",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/profile": {
+      "get": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Data profil customer yang sedang login.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/address": {
+      "get": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Daftar address.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "filter berdasarkan ID user (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "address_id",
+                "address_title"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/address/add": {
+      "post": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Tambah address.",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "formData",
+            "description": "ID user.",
+            "type": "integer"
+          },
+          {
+            "name": "address_title",
+            "in": "formData",
+            "description": "judul alamat.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address_complete",
+            "in": "formData",
+            "description": "alamat lengkap.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address_city",
+            "in": "formData",
+            "description": "nama kota.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address_postal",
+            "in": "formData",
+            "description": "kode postal.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "address_province",
+            "in": "formData",
+            "description": "nama provinsi.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/address/edit": {
+      "put": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Perbaiki address.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "formData",
+            "description": "ID address yang akan diperbaiki.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "user_id",
+            "in": "formData",
+            "description": "ID user.",
+            "type": "integer"
+          },
+          {
+            "name": "address_title",
+            "in": "formData",
+            "description": "judul alamat.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address_complete",
+            "in": "formData",
+            "description": "alamat lengkap.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address_city",
+            "in": "formData",
+            "description": "nama kota.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address_postal",
+            "in": "formData",
+            "description": "kode postal.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "address_province",
+            "in": "formData",
+            "description": "nama provinsi.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/address/delete": {
+      "delete": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Hapus address.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "query",
+            "description": "ID address yang akan dihapus",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/transaction": {
+      "get": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Daftar transaksi.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "filter berdasarkan ID user (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "transaction_status",
+            "in": "query",
+            "description": "status transaksi.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "PAID",
+                "UNPAID"
+              ]
+            }
+          },
+          {
+            "name": "shipment_status",
+            "in": "query",
+            "description": "status pengiriman.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Pending",
+                "Processing",
+                "Delivered",
+                "Completed"
+              ]
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "address_id",
+                "address_title"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/transaction/add": {
+      "post": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Tambah transaksi.",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "formData",
+            "description": "ID user.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "transaction_time",
+            "in": "formData",
+            "description": "Waktu transaksi (format YYYY-MM-DD).",
+            "required": true,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "transaction_status",
+            "in": "formData",
+            "description": "status transaksi.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "bank-transfer",
+                "paypal",
+                "cash-on-delivery"
+              ]
+            }
+          },
+          {
+            "name": "transaction_payment",
+            "in": "formData",
+            "description": "metode pembayaran.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "PAID",
+                "UNPAID"
+              ]
+            }
+          },
+          {
+            "name": "transaction_note",
+            "in": "formData",
+            "description": "Catatan untuk transaksi.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "transaction_items",
+            "in": "formData",
+            "description": "Bentuk JSON dari Array objek Item.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "shipment_address_id",
+            "in": "formData",
+            "description": "ID alamat dari User.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "shipment_courier",
+            "in": "formData",
+            "description": "Kode kurir.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "jne",
+                "tiki",
+                "pos"
+              ]
+            }
+          },
+          {
+            "name": "shipment_service",
+            "in": "formData",
+            "description": "Kode service kurir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "shipment_cost",
+            "in": "formData",
+            "description": "Total biaya pengiriman.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "shipment_time",
+            "in": "formData",
+            "description": "Tanggal pengiriman.",
+            "required": true,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "shipment_status",
+            "in": "formData",
+            "description": "status pengiriman.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Pending",
+                "Processing",
+                "Delivered",
+                "Completed"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/customer/review": {
+      "get": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Data review.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "filter berdasarkan ID user.",
+            "type": "integer"
+          },
+          {
+            "name": "transaction_id",
+            "in": "query",
+            "description": "filter berdasarkan ID transaksi.",
+            "type": "integer"
+          },
+          {
+            "name": "item_id",
+            "in": "query",
+            "description": "filter berdasarkan ID item.",
+            "type": "integer"
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "urutkan berdasarkan field.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "review_id",
+                "review_time",
+                "review_rate"
+              ]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "mode pengurutan.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "jumlah data per-query (-1 untuk semua).",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset data (biasanya untuk paging).",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/option": {
+      "get": {
+        "tags": [
+          "Private"
+        ],
+        "summary": "Data option yang digunakan di web utama PesanSayur.id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    }
+  }
+}
